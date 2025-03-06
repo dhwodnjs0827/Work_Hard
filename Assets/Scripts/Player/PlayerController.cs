@@ -5,14 +5,11 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PlayerInput))]
 public class PlayerController : MonoBehaviour
 {
-    [Header("Movement")]
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float jumpPower;
+    [Header("Movement"), SerializeField, Range(0f, 20f), Tooltip("기본 이동 속도")] private float moveSpeed;
+    [SerializeField, Range(0f, 20f), Tooltip("점프력")] private float jumpPower;
     private Vector2 moveInputDir;
-
     [Space]
-    [Header("Look")]
-    [SerializeField] private float mouseSensitivity;
+    [Header("Look"), SerializeField, Range(0f, 100f), Tooltip("마우스 민감도")] private float mouseSensitivity;
     private const float MOUSE_SENSITIVITY_MULTIPLIER = 0.01f;
     private Transform camContainer;
     private float curCamRotX;
@@ -20,16 +17,21 @@ public class PlayerController : MonoBehaviour
     private const float MAX_ROT_X = 60f;
     private Vector2 mouseInputDelta;
     
-    private LayerMask groundLayer;
+    private LayerMask groundDetectLayer;
 
     private Rigidbody rb;
 
     private void Awake()
     {
-        camContainer = transform.Find("CameraContainer");
-        groundLayer = LayerMask.GetMask("Ground");
+        moveSpeed = 5f;
+        jumpPower = 5f;
         
-        InitRigdbody();
+        mouseSensitivity = 10f;
+        camContainer = transform.Find("CameraContainer");
+        
+        groundDetectLayer = LayerMask.GetMask("Ground");
+        
+        rb = GetComponent<Rigidbody>();
     }
 
     private void FixedUpdate()
@@ -46,13 +48,7 @@ public class PlayerController : MonoBehaviour
     {
         Look();
     }
-
-    private void InitRigdbody()
-    {
-        rb = GetComponent<Rigidbody>();
-        rb.constraints = RigidbodyConstraints.FreezeRotation;
-    }
-
+    
     private void Move()
     {
         Vector3 velocity = Vector3.right * moveInputDir.x + Vector3.forward * moveInputDir.y;
@@ -86,7 +82,7 @@ public class PlayerController : MonoBehaviour
         
         for (int i = 0; i < groundRay.Length; i++)
         {
-            if (Physics.Raycast(groundRay[i], 0.1f, groundLayer))
+            if (Physics.Raycast(groundRay[i], 0.1f, groundDetectLayer))
             {
                 return true;
             }
