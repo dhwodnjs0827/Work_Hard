@@ -14,11 +14,11 @@ public class PlayerController : MonoBehaviour
 
     [Space]
     [Header("Look"), SerializeField, Range(0f, 100f), Tooltip("마우스 민감도")] private float mouseSensitivity;
-    private const float MOUSE_SENSITIVITY_MULTIPLIER = 0.01f;
+    private const float MOUSE_SENSITIVITY_MULTIPLIER = 0.01f;   // 마우스 감도 배율
     private Transform camContainer;
     private float curCamRotX;
-    private const float MIN_ROT_X = -60f;
-    private const float MAX_ROT_X = 60f;
+    private const float MIN_ROT_X = -60f;   // 최소 X축 회전값
+    private const float MAX_ROT_X = 60f;    // 최대 X축 회전값
     private Vector2 mouseInputDelta;
     
     private LayerMask groundDetectLayer;
@@ -80,6 +80,11 @@ public class PlayerController : MonoBehaviour
         camContainer.localEulerAngles = new Vector3(-curCamRotX, 0f, 0f);
     }
 
+    /// <summary>
+    /// 바닥 검사 메서드
+    /// </summary>
+    /// <returns>True: 바닥 상태
+    /// <para>False: 공중 상태</para></returns>
     private bool IsGround()
     {
         var groundRay = new Ray[4]
