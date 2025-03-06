@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,6 +9,8 @@ public class PlayerController : MonoBehaviour
     [Header("Movement"), SerializeField, Range(0f, 20f), Tooltip("기본 이동 속도")] private float moveSpeed;
     [SerializeField, Range(0f, 20f), Tooltip("점프력")] private float jumpPower;
     private Vector2 moveInputDir;
+    private bool isSprint;
+    [SerializeField, Range(1f, 3f), Tooltip("달리기 속도 배율")] private float sprintSpeedMultiplier;
     [Space]
     [Header("Look"), SerializeField, Range(0f, 100f), Tooltip("마우스 민감도")] private float mouseSensitivity;
     private const float MOUSE_SENSITIVITY_MULTIPLIER = 0.01f;
@@ -25,6 +28,8 @@ public class PlayerController : MonoBehaviour
     {
         moveSpeed = 5f;
         jumpPower = 5f;
+        isSprint = false;
+        sprintSpeedMultiplier = 1.5f;
         
         mouseSensitivity = 10f;
         camContainer = transform.Find("CameraContainer");
@@ -51,15 +56,16 @@ public class PlayerController : MonoBehaviour
     
     private void Move()
     {
-        Vector3 velocity = Vector3.right * moveInputDir.x + Vector3.forward * moveInputDir.y;
-        velocity = transform.TransformDirection(velocity.normalized) * moveSpeed;
+        var velocity = Vector3.right * moveInputDir.x + Vector3.forward * moveInputDir.y;
+        var speed = isSprint ? moveSpeed * sprintSpeedMultiplier : moveSpeed;
+        velocity = transform.TransformDirection(velocity.normalized) * speed;
         velocity.y = rb.velocity.y;
         rb.velocity = velocity;
     }
 
     private void Rotation()
     {
-        float rotY = mouseInputDelta.x * mouseSensitivity * MOUSE_SENSITIVITY_MULTIPLIER;
+        var rotY = mouseInputDelta.x * mouseSensitivity * MOUSE_SENSITIVITY_MULTIPLIER;
         transform.eulerAngles += new Vector3(0f, rotY, 0f);
     }
 
@@ -72,22 +78,15 @@ public class PlayerController : MonoBehaviour
 
     private bool IsGround()
     {
-        Ray[] groundRay = new Ray[4]
+        var groundRay = new Ray[4]
         {
             new Ray(transform.position + (transform.forward * 0.2f) + (transform.up * 0.01f), Vector3.down),
             new Ray(transform.position + (-transform.forward * 0.2f) + (transform.up * 0.01f), Vector3.down),
             new Ray(transform.position + (transform.right * 0.2f) + (transform.up * 0.01f), Vector3.down),
             new Ray(transform.position + (transform.right * 0.2f) + (transform.up * 0.01f), Vector3.down)
         };
-        
-        for (int i = 0; i < groundRay.Length; i++)
-        {
-            if (Physics.Raycast(groundRay[i], 0.1f, groundDetectLayer))
-            {
-                return true;
-            }
-        }
-        return false;
+
+        return groundRay.Any(t => Physics.Raycast(t, 0.1f, groundDetectLayer));
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -100,6 +99,11 @@ public class PlayerController : MonoBehaviour
         {
             moveInputDir = Vector2.zero;
         }
+    }
+
+    public void OnSprint(InputAction.CallbackContext context)
+    {
+        isSprint = context.ReadValueAsButton();
     }
 
     public void OnJump(InputAction.CallbackContext context)
