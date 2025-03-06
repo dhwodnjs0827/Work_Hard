@@ -1399,8 +1399,8 @@ MonoBehaviour:
     m_ActionName: Player/Look[/Mouse/delta]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1629320141}
-        m_TargetAssemblyTypeName: PlayerCondition, Assembly-CSharp
+      - m_Target: {fileID: 1629320140}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
         m_MethodName: OnSprint
         m_Mode: 0
         m_Arguments:
@@ -1432,7 +1432,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 5
   jumpPower: 5
-  sprintSpeedMultiplier: 1.5
+  sprintSpeedMultiplier: 2
   mouseSensitivity: 10
 --- !u!114 &1629320141
 MonoBehaviour:
@@ -1641,7 +1641,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 554a6c4118ca69b4b94693aa68eeef60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  guageBar: {fileID: 0}
+  guageBar: {fileID: 1519130454}
 --- !u!1 &2106398342
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class PlayerCondition : MonoBehaviour
 {
@@ -8,11 +7,10 @@ public class PlayerCondition : MonoBehaviour
     private float staminaRegenRate;
     private float staminaConsumptionRate;
 
-    private bool isSprint;
-    
     [SerializeField] private StaminaUI staminaUI;
-    
-    public bool  IsSprint => isSprint && curStamina > 0f;
+    private PlayerController controller;
+
+    public bool CanSprint { get; private set; }
 
     private void Awake()
     {
@@ -20,37 +18,32 @@ public class PlayerCondition : MonoBehaviour
         curStamina = maxStamina;
         staminaRegenRate = 5f;
         staminaConsumptionRate = 20f;
-
-        isSprint = false;
+        CanSprint = true;
+        
+        controller =  GetComponent<PlayerController>();
     }
 
-    public void HandleStamina()
+    private void Update()
     {
-        if (isSprint && curStamina > 0)
+        CanSprint = curStamina > 0f ? true : false;
+        HandleStamina();
+    }
+
+    private void HandleStamina()
+    {
+        if (controller.IsSprint)
         {
             curStamina = Mathf.Max(curStamina - staminaConsumptionRate * Time.deltaTime, 0f);
-            if (curStamina <= 0f)
+            if (curStamina == 0f)
             {
-                isSprint = false;
+                CanSprint = false;
             }
         }
         else
         {
             curStamina = Mathf.Min(curStamina + staminaRegenRate * Time.deltaTime, maxStamina);
         }
-        
-        staminaUI.UpdateUIBar(curStamina / maxStamina);
-    }
 
-    public void OnSprint(InputAction.CallbackContext context)
-    {
-        if (context.performed)
-        {
-            isSprint = true;
-        }
-        else if (context.canceled)
-        {
-            isSprint = false;
-        }
+        staminaUI.UpdateUIBar(curStamina / maxStamina);
     }
 }

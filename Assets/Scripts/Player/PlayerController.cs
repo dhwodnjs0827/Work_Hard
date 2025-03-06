@@ -10,6 +10,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField, Range(0f, 20f), Tooltip("점프력")] private float jumpPower;
     private Vector2 moveInputDir;
     [SerializeField, Range(1f, 3f), Tooltip("달리기 속도 배율")] private float sprintSpeedMultiplier;
+    private bool canSprint;
+
     [Space]
     [Header("Look"), SerializeField, Range(0f, 100f), Tooltip("마우스 민감도")] private float mouseSensitivity;
     private const float MOUSE_SENSITIVITY_MULTIPLIER = 0.01f;
@@ -20,9 +22,11 @@ public class PlayerController : MonoBehaviour
     private Vector2 mouseInputDelta;
     
     private LayerMask groundDetectLayer;
-
-    private PlayerCondition condition;
+    
     private Rigidbody rb;
+    private PlayerCondition condition;
+    
+    public bool IsSprint => canSprint && moveInputDir.magnitude > 0f && condition.CanSprint;
 
     private void Awake()
     {
@@ -35,8 +39,8 @@ public class PlayerController : MonoBehaviour
         
         groundDetectLayer = LayerMask.GetMask("Ground");
         
-        condition = GetComponent<PlayerCondition>();
         rb = GetComponent<Rigidbody>();
+        condition =  GetComponent<PlayerCondition>();
     }
 
     private void FixedUpdate()
@@ -57,8 +61,7 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         var velocity = Vector3.right * moveInputDir.x + Vector3.forward * moveInputDir.y;
-        var speed = condition.IsSprint ? moveSpeed * sprintSpeedMultiplier : moveSpeed;
-        condition.HandleStamina();
+        var speed = canSprint && condition.CanSprint ? moveSpeed * sprintSpeedMultiplier : moveSpeed;
         velocity = transform.TransformDirection(velocity.normalized) * speed;
         velocity.y = rb.velocity.y;
         rb.velocity = velocity;
@@ -99,6 +102,18 @@ public class PlayerController : MonoBehaviour
         else if (context.canceled)
         {
             moveInputDir = Vector2.zero;
+        }
+    }
+
+    public void OnSprint(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            canSprint = true;
+        }
+        else if (context.canceled)
+        {
+            canSprint = false;
         }
     }
 
