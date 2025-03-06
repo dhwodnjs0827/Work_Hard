@@ -9,7 +9,6 @@ public class PlayerController : MonoBehaviour
     [Header("Movement"), SerializeField, Range(0f, 20f), Tooltip("기본 이동 속도")] private float moveSpeed;
     [SerializeField, Range(0f, 20f), Tooltip("점프력")] private float jumpPower;
     private Vector2 moveInputDir;
-    private bool isSprint;
     [SerializeField, Range(1f, 3f), Tooltip("달리기 속도 배율")] private float sprintSpeedMultiplier;
     [Space]
     [Header("Look"), SerializeField, Range(0f, 100f), Tooltip("마우스 민감도")] private float mouseSensitivity;
@@ -22,13 +21,13 @@ public class PlayerController : MonoBehaviour
     
     private LayerMask groundDetectLayer;
 
+    private PlayerCondition condition;
     private Rigidbody rb;
 
     private void Awake()
     {
         moveSpeed = 5f;
         jumpPower = 5f;
-        isSprint = false;
         sprintSpeedMultiplier = 1.5f;
         
         mouseSensitivity = 10f;
@@ -36,6 +35,7 @@ public class PlayerController : MonoBehaviour
         
         groundDetectLayer = LayerMask.GetMask("Ground");
         
+        condition = GetComponent<PlayerCondition>();
         rb = GetComponent<Rigidbody>();
     }
 
@@ -57,7 +57,8 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         var velocity = Vector3.right * moveInputDir.x + Vector3.forward * moveInputDir.y;
-        var speed = isSprint ? moveSpeed * sprintSpeedMultiplier : moveSpeed;
+        var speed = condition.IsSprint ? moveSpeed * sprintSpeedMultiplier : moveSpeed;
+        condition.HandleStamina();
         velocity = transform.TransformDirection(velocity.normalized) * speed;
         velocity.y = rb.velocity.y;
         rb.velocity = velocity;
@@ -99,11 +100,6 @@ public class PlayerController : MonoBehaviour
         {
             moveInputDir = Vector2.zero;
         }
-    }
-
-    public void OnSprint(InputAction.CallbackContext context)
-    {
-        isSprint = context.ReadValueAsButton();
     }
 
     public void OnJump(InputAction.CallbackContext context)
