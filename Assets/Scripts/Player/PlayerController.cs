@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private PlayerCondition condition;
     
     public bool IsSprint => canSprint && moveInputDir.magnitude > 0f && condition.CanSprint;
+    public Rigidbody Rigidbody => rb;
 
     private void Awake()
     {
@@ -91,7 +92,7 @@ public class PlayerController : MonoBehaviour
     /// <para>False: 공중 상태</para></returns>
     private bool IsGround()
     {
-        var groundRay = new Ray[4]
+        var groundRay = new Ray[]
         {
             new Ray(transform.position + (transform.forward * 0.2f) + (transform.up * 0.01f), Vector3.down),
             new Ray(transform.position + (-transform.forward * 0.2f) + (transform.up * 0.01f), Vector3.down),

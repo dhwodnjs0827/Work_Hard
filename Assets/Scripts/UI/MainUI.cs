@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class MainUI : BaseUI
 {
     private Player player;
+
+    private float sec;
+    private int min;
     
     [SerializeField] private StaminaUI staminaUI;
     [SerializeField] private TextMeshProUGUI playTimeText;
@@ -17,7 +20,7 @@ public class MainUI : BaseUI
     public StaminaUI StaminaUI => staminaUI;
     public GameObject InteractGuide => interactGuide;
     public GameObject InteractInfo => interactInfo;
-    
+
     public override void Init(UIManager instance)
     {
         base.Init(instance);
@@ -35,7 +38,14 @@ public class MainUI : BaseUI
     
     private void Update()
     {
-        playTimeText.text = Time.time.ToString("N0");
-        heightInfoText.text = $"현재 높이: {player.transform.position.y:N0}";
+        sec += Time.deltaTime;
+        if (sec >= 60f)
+        {
+            min += 1;
+            sec = 0;
+        }
+
+        playTimeText.text = $"진행 시간 {min:D2}:{Mathf.FloorToInt(sec):D2}";
+        heightInfoText.text = $"현재 높이 {player.transform.position.y:N0}m";
     }
 }

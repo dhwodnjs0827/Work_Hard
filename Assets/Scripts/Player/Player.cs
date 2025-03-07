@@ -8,6 +8,8 @@ public class Player : MonoBehaviour
     private PlayerController controller;
     private PlayerCondition condition;
     
+    public PlayerController Controller => controller;
+    
     private void Awake()
     {
         GameManager.Instance.InitPlayer(this);
