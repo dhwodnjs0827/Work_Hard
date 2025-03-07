@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 534ba9689dc3f3a4bb7cebd66d195a57, type: 3}
+  m_Name: Sign
+  m_EditorClassIdentifier: 
+  itemName: "\uD45C\uC9C0\uD310"
+  itemDescription: "\uD2B9\uC815 \uBB38\uAD6C\uB97C \uD45C\uC2DC\uD558\uB294 \uC544\uC774\uD15C"
+  itemType: 1
+  itemPrefab: {fileID: 0}

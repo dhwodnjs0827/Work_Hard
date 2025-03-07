@@ -7,7 +7,7 @@ public class PlayerCondition : MonoBehaviour
     private float staminaRegenRate; // 스태미나 소모량
     private float staminaConsumptionRate;   // 스태미나 회복량
 
-    [SerializeField] private StaminaUI staminaUI;
+    private StaminaUI staminaUI;
     private PlayerController controller;
 
     public bool CanSprint { get; private set; }
@@ -21,6 +21,11 @@ public class PlayerCondition : MonoBehaviour
         CanSprint = true;
         
         controller =  GetComponent<PlayerController>();
+    }
+
+    private void Start()
+    {
+        staminaUI = UIManager.Instance.GetMainUI().StaminaUI;
     }
 
     private void Update()

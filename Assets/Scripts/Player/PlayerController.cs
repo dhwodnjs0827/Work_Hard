@@ -95,7 +95,8 @@ public class PlayerController : MonoBehaviour
             new Ray(transform.position + (transform.right * 0.2f) + (transform.up * 0.01f), Vector3.down)
         };
 
-        return groundRay.Any(t => Physics.Raycast(t, 0.1f, groundDetectLayer));
+        //return groundRay.Any(t => Physics.Raycast(t, 0.1f, groundDetectLayer));
+        return groundRay.Any(t => Physics.Raycast(t, 0.1f));
     }
 
     public void OnMove(InputAction.CallbackContext context)
