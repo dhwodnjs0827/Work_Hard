@@ -10,13 +10,12 @@ public class ReadMeSign : MonoBehaviour, IInteraction
 
     private void Start()
     {
-        infoUI = UIManager.Instance.GetMainUI().InteractInfo;
+        infoUI = UIManager.Instance.MainUI.InteractInfo;
     }
 
     public void OnInteract()
     {
-        // UI 활성화
         infoUI.gameObject.SetActive(true);
-        Debug.Log(itemData.itemDescription);
+        UIManager.ActiveCursor(true);
     }
 }

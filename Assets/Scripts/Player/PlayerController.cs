@@ -69,12 +69,16 @@ public class PlayerController : MonoBehaviour
 
     private void Rotation()
     {
+        if (Cursor.lockState != CursorLockMode.Locked) return;
+        
         var rotY = mouseInputDelta.x * mouseSensitivity * MOUSE_SENSITIVITY_MULTIPLIER;
         transform.eulerAngles += new Vector3(0f, rotY, 0f);
     }
 
     private void Look()
     {
+        if (Cursor.lockState != CursorLockMode.Locked) return;
+        
         curCamRotX += mouseInputDelta.y * mouseSensitivity * MOUSE_SENSITIVITY_MULTIPLIER;
         curCamRotX = Mathf.Clamp(curCamRotX, MIN_ROT_X, MAX_ROT_X);
         camContainer.localEulerAngles = new Vector3(-curCamRotX, 0f, 0f);

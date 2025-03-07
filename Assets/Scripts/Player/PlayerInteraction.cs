@@ -22,7 +22,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private void Start()
     {
-        interactGuide = UIManager.Instance.GetMainUI().InteractGuide;
+        interactGuide = UIManager.Instance.MainUI.InteractGuide;
         
         mainCam = Camera.main;
     }

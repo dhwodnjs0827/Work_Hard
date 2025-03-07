@@ -25,7 +25,7 @@ public class PlayerCondition : MonoBehaviour
 
     private void Start()
     {
-        staminaUI = UIManager.Instance.GetMainUI().StaminaUI;
+        staminaUI = UIManager.Instance.MainUI.StaminaUI;
     }
 
     private void Update()
