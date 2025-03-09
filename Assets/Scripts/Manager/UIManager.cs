@@ -13,6 +13,9 @@ public class UIManager : Singleton<UIManager>
         SetMainUI();
     }
 
+    /// <summary>
+    /// mainUI에 데이터 저장
+    /// </summary>
     private void SetMainUI()
     {
         if (mainUI != null) return;
@@ -32,6 +35,11 @@ public class UIManager : Singleton<UIManager>
         mainUI.Init(this);
     }
 
+    /// <summary>
+    /// 마우스 커서 On/Off 메서드
+    /// </summary>
+    /// <param name="active">True: 마우스 커서 활성화
+    /// <para>False: 마우스 커서 비활성화</para></param>
     public static void ActiveCursor(bool active)
     {
         Cursor.lockState = active ? CursorLockMode.None : CursorLockMode.Locked;

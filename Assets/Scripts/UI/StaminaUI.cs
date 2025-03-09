@@ -3,10 +3,10 @@ using UnityEngine.UI;
 
 public class StaminaUI : MonoBehaviour
 {
-    [SerializeField] private Image guageBar;
+    [SerializeField] private Image gaugeBar;
 
     public void UpdateUIBar(float amount)
     {
-        guageBar.fillAmount = amount;
+        gaugeBar.fillAmount = amount;
     }
 }

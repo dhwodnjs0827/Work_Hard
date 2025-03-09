@@ -22,12 +22,11 @@ public class PlayerController : MonoBehaviour
     private Vector2 mouseInputDelta;
     
     private LayerMask groundDetectLayer;
-    
-    private Rigidbody rb;
+
     private PlayerCondition condition;
     
     public bool IsSprint => canSprint && moveInputDir.magnitude > 0f && condition.CanSprint;
-    public Rigidbody Rigidbody => rb;
+    public Rigidbody Rigidbody { get; private set; }
 
     private void Awake()
     {
@@ -40,7 +39,7 @@ public class PlayerController : MonoBehaviour
         
         groundDetectLayer = LayerMask.GetMask("Ground");
         
-        rb = GetComponent<Rigidbody>();
+        Rigidbody = GetComponent<Rigidbody>();
         condition =  GetComponent<PlayerCondition>();
     }
 
@@ -59,15 +58,21 @@ public class PlayerController : MonoBehaviour
         Look();
     }
     
+    /// <summary>
+    /// 캐릭터 이동
+    /// </summary>
     private void Move()
     {
         var velocity = Vector3.right * moveInputDir.x + Vector3.forward * moveInputDir.y;
         var speed = canSprint && condition.CanSprint ? moveSpeed * sprintSpeedMultiplier : moveSpeed;
         velocity = transform.TransformDirection(velocity.normalized) * speed;
-        velocity.y = rb.velocity.y;
-        rb.velocity = velocity;
+        velocity.y = Rigidbody.velocity.y;
+        Rigidbody.velocity = velocity;
     }
 
+    /// <summary>
+    /// 캐릭터 회전
+    /// </summary>
     private void Rotation()
     {
         if (Cursor.lockState != CursorLockMode.Locked) return;
@@ -76,6 +81,9 @@ public class PlayerController : MonoBehaviour
         transform.eulerAngles += new Vector3(0f, rotY, 0f);
     }
 
+    /// <summary>
+    /// 1인칭 카메라 컨트롤
+    /// </summary>
     private void Look()
     {
         if (Cursor.lockState != CursorLockMode.Locked) return;
@@ -100,6 +108,7 @@ public class PlayerController : MonoBehaviour
             new Ray(transform.position + (transform.right * 0.2f) + (transform.up * 0.01f), Vector3.down)
         };
 
+        //TODO: 나중에 주석처리 해제해야 함
         //return groundRay.Any(t => Physics.Raycast(t, 0.1f, groundDetectLayer));
         return groundRay.Any(t => Physics.Raycast(t, 0.1f));
     }
@@ -132,7 +141,7 @@ public class PlayerController : MonoBehaviour
     {
         if (context.started && IsGround())
         {
-            rb.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+            Rigidbody.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
         }
     }
 

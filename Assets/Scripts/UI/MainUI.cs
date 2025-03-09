@@ -7,8 +7,8 @@ public class MainUI : BaseUI
 {
     private Player player;
 
-    private float sec;
-    private int min;
+    private float playTimeSec;
+    private int playTimeMin;
     
     [SerializeField] private StaminaUI staminaUI;
     [SerializeField] private TextMeshProUGUI playTimeText;
@@ -38,14 +38,14 @@ public class MainUI : BaseUI
     
     private void Update()
     {
-        sec += Time.deltaTime;
-        if (sec >= 60f)
+        playTimeSec += Time.deltaTime;
+        if (playTimeSec >= 60f)
         {
-            min += 1;
-            sec = 0;
+            playTimeMin += 1;
+            playTimeSec = 0;
         }
 
-        playTimeText.text = $"진행 시간 {min:D2}:{Mathf.FloorToInt(sec):D2}";
+        playTimeText.text = $"진행 시간 {playTimeMin:D2}:{Mathf.FloorToInt(playTimeSec):D2}";
         heightInfoText.text = $"현재 높이 {player.transform.position.y:N0}m";
     }
 }

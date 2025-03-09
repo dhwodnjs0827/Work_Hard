@@ -10,7 +10,7 @@ public class PlayerCondition : MonoBehaviour
     private StaminaUI staminaUI;
     private PlayerController controller;
 
-    public bool CanSprint { get; private set; }
+    public bool CanSprint { get; private set; } // 스태미나가 충분하면 달리기 가능
 
     private void Awake()
     {

@@ -3,15 +3,14 @@ using UnityEngine;
 
 public class ReadMeSign : MonoBehaviour, IInteraction
 {
-    private ItemData itemData;
-    private GameObject infoUI;
+    private GameObject infoUI;  // 상호작용 시 활성화 할 UI 게임 오브젝트
 
     private void Start()
     {
         infoUI = UIManager.Instance.MainUI.InteractInfo;
     }
 
-    public void OnInteract()
+    void IInteraction.OnInteract()
     {
         infoUI.gameObject.SetActive(true);
         UIManager.ActiveCursor(true);

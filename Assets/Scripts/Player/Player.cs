@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
 
     private void InitCapsuleCollider()
     {
-        CapsuleCollider col = GetComponent<CapsuleCollider>();
+        var col = GetComponent<CapsuleCollider>();
         col.isTrigger = false;
         col.providesContacts = false;
         col.material = null;
