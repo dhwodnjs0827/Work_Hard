@@ -38,8 +38,7 @@ public class UIManager : Singleton<UIManager>
     /// <summary>
     /// 마우스 커서 On/Off 메서드
     /// </summary>
-    /// <param name="active">True: 마우스 커서 활성화
-    /// <para>False: 마우스 커서 비활성화</para></param>
+    /// <param name="active">True: 마우스 커서 활성화, False: 마우스 커서 비활성화</param>
     public static void ActiveCursor(bool active)
     {
         Cursor.lockState = active ? CursorLockMode.None : CursorLockMode.Locked;

@@ -32,6 +32,14 @@ public class PlayerInteraction : MonoBehaviour
         CheckInteractionObject();
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Item"))
+        {
+            other.gameObject.GetComponent<IInteraction>().OnInteract();
+        }
+    }
+
     /// <summary>
     /// 상호작용 오브젝트 검사 메서드
     /// </summary>

@@ -3,8 +3,13 @@ namespace DataDeclaration
     #region Enum
     public enum ItemType
     {
-        Consumable,
+        Recoverable,
         Sign
+    }
+
+    public enum ItemRecoverable
+    {
+        Stamina
     }
 
     public enum UIState

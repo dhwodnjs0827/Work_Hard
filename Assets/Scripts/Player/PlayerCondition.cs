@@ -57,4 +57,9 @@ public class PlayerCondition : MonoBehaviour
         // 스태미나 UI 업데이트
         staminaUI.UpdateUIBar(curStamina / maxStamina);
     }
+
+    public void RecoverStamina(float amount)
+    {
+        curStamina = Mathf.Min(curStamina + amount, maxStamina);
+    }
 }

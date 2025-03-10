@@ -5,17 +5,16 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerCondition))]
 public class Player : MonoBehaviour
 {
-    private PlayerController controller;
-    private PlayerCondition condition;
-    
-    public PlayerController Controller => controller;
-    
+    public PlayerController Controller { get; private set; }
+
+    public PlayerCondition Condition { get; private set; }
+
     private void Awake()
     {
         GameManager.Instance.InitPlayer(this);
         
-        controller = GetComponent<PlayerController>();
-        condition = GetComponent<PlayerCondition>();
+        Controller = GetComponent<PlayerController>();
+        Condition = GetComponent<PlayerCondition>();
         
         InitCapsuleCollider();
     }
