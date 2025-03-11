@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
 
     private PlayerCondition condition;
     
-    public bool IsSprint => canSprint && moveInputDir.magnitude > 0f && condition.CanSprint;
+    public bool IsSprint => canSprint && moveInputDir.magnitude > 0f;
 
     public Rigidbody Rigidbody { get; private set; }
 
@@ -70,7 +70,16 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         var velocity = Vector3.right * moveInputDir.x + Vector3.forward * moveInputDir.y;
-        var speed = canSprint && condition.CanSprint ? moveSpeed * sprintSpeedMultiplier : moveSpeed;
+        float speed;
+        if (canSprint && moveInputDir.magnitude > 0.01f && condition.CanSprint)
+        {
+            condition.HandleStamina();
+            speed = moveSpeed * sprintSpeedMultiplier;
+        }
+        else
+        {
+            speed = moveSpeed;
+        }
         velocity = transform.TransformDirection(velocity.normalized) * speed;
         velocity.y = Rigidbody.velocity.y;
         Rigidbody.velocity = velocity;
@@ -146,11 +155,11 @@ public class PlayerController : MonoBehaviour
 
     public void OnSprint(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.started || context.performed)
         {
             canSprint = true;
         }
-        else if (context.canceled)
+        else
         {
             canSprint = false;
         }

@@ -7,6 +7,8 @@ public class PlayerCondition : MonoBehaviour
     private float curStamina;   // 현재 스태미나
     private float staminaRegenRate; // 스태미나 소모량
     private float staminaConsumptionRate;   // 스태미나 회복량
+    private float lastSprintTime;
+    private float staminaRegenDelay;
 
     private float maxSlowTime;  // 최대 슬로우 시간
     private float curSlowTime;  // 현재 슬로우 시간
@@ -24,13 +26,14 @@ public class PlayerCondition : MonoBehaviour
         curStamina = maxStamina;
         staminaRegenRate = 5f;
         staminaConsumptionRate = 20f;
+        staminaRegenDelay = 2f;
 
         maxSlowTime = 10f;
         curSlowTime = maxSlowTime;
         slowTimeConsumptionRate = 5f;
-        CanSlowMode = true;
-        
+
         CanSprint = true;
+        CanSlowMode = true;
         
         controller =  GetComponent<PlayerController>();
     }
@@ -42,30 +45,23 @@ public class PlayerCondition : MonoBehaviour
 
     private void Update()
     {
-        HandleStamina();
-    }
-    
-    /// <summary>
-    /// 달리기 여부에 따른 스태미나 소모/회복
-    /// </summary>
-    private void HandleStamina()
-    {
-        if (controller.IsSprint)
+        if (!controller.IsSprint)
         {
-            // 스태미나 소모
-            curStamina = Mathf.Max(curStamina - staminaConsumptionRate * Time.deltaTime, 0f);
-            if (curStamina == 0f)
-            {
-                CanSprint = false;
-            }
-        }
-        else
-        {
+            lastSprintTime += Time.deltaTime;
+            if (!(lastSprintTime > staminaRegenDelay)) return;
             // 스태미나 회복
             curStamina = Mathf.Min(curStamina + staminaRegenRate * Time.deltaTime, maxStamina);
-            CanSprint = true;
+            CanSprint = curStamina != 0f;
+            conditionUI.UpdateConditionUI(ConditionType.Stamina, curStamina / maxStamina);
         }
+    }
 
+    public void HandleStamina()
+    {
+        // 스태미나 소모
+        curStamina = Mathf.Max(curStamina - staminaConsumptionRate * Time.deltaTime, 0f);
+        CanSprint = curStamina != 0f;
+        lastSprintTime = 0f;
         // 스태미나 UI 업데이트
         conditionUI.UpdateConditionUI(ConditionType.Stamina, curStamina / maxStamina);
     }
@@ -75,6 +71,9 @@ public class PlayerCondition : MonoBehaviour
         curStamina = Mathf.Min(curStamina + amount, maxStamina);
     }
 
+    /// <summary>
+    /// 슬로우 모드 진입 시 작동 시간 감소
+    /// </summary>
     public void HandleSlowTime()
     {
         curSlowTime = Mathf.Max(curSlowTime - slowTimeConsumptionRate * Time.deltaTime, 0f);
