@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Camera))]
 public class CameraController : MonoBehaviour
 {
     private Camera cam;
@@ -9,16 +10,16 @@ public class CameraController : MonoBehaviour
 
     private void Awake()
     {
-        cam = Camera.main;
+        cam = GetComponent<Camera>();
         firstPersonMask = ~(1 << LayerMask.NameToLayer("Player"));
         thirdPersonMask = cam.cullingMask;
-    }
-
-    private void Start()
-    {
         cam.cullingMask = firstPersonMask;
     }
 
+    /// <summary>
+    /// 시점 변경에 따른 카메라 CullingMask 변경
+    /// </summary>
+    /// <param name="isFirstPerson">True: 1인칭   False: 3인칭</param>
     public void SetPointOfView(bool isFirstPerson)
     {
         cam.cullingMask = isFirstPerson ? firstPersonMask : thirdPersonMask;

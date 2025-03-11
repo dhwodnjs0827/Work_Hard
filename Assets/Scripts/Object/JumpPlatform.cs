@@ -13,8 +13,15 @@ public class JumpPlatform : MonoBehaviour
     {
         col = GetComponent<BoxCollider>();
         
-        forceAmount = 10f;
+        forceAmount = 5f;
         InitJumpArea();
+
+        // 점프 구역 확인용 오브젝트 생성
+        // TODO: Gizmo로 변경 가능할까?
+        var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        go.transform.parent = transform;
+        go.transform.localPosition = Vector3.up * minY;
+        go.transform.localScale = new Vector3(jumpArea.size.x, 0f,  jumpArea.size.y);
     }
 
     private void OnCollisionStay(Collision other)
@@ -31,13 +38,13 @@ public class JumpPlatform : MonoBehaviour
     /// </summary>
     private void InitJumpArea()
     {
-        var minX = col.bounds.min.x + 0.05f;
-        var maxX = col.bounds.max.x - 0.05f;
-        var minZ = col.bounds.min.z + 0.05f;
-        var maxZ = col.bounds.max.z - 0.05f;
+        var minX = col.bounds.min.x + 0.1f;
+        var maxX = col.bounds.max.x - 0.1f;
+        var minZ = col.bounds.min.z + 0.1f;
+        var maxZ = col.bounds.max.z - 0.1f;
         
         jumpArea = new Rect(minX, minZ, maxX - minX, maxZ - minZ);
-        minY = col.bounds.max.y - 0.05f;
+        minY = col.center.y + col.size.y * 0.5f;
     }
 
     /// <summary>

@@ -1,7 +1,10 @@
-using System;
 using DataDeclaration;
 using UnityEngine;
 
+/// <summary>
+/// 상호 작용 Item 클래스
+/// <para>TODO: 상속 구조로 변경</para>
+/// </summary>
 public class InteractItem : MonoBehaviour, IInteraction
 {
     [SerializeField] private ItemData itemData;

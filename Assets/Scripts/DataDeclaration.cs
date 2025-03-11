@@ -1,3 +1,4 @@
+// 데이터 선언부
 namespace DataDeclaration
 {
     #region Enum
@@ -21,6 +22,9 @@ namespace DataDeclaration
     #endregion
     
     #region Interface
+    /// <summary>
+    /// 상호작용 오브젝트에 상속
+    /// </summary>
     public interface IInteraction
     {
         /// <summary>

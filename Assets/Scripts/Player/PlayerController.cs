@@ -2,10 +2,10 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(PlayerInput))]
+[RequireComponent(typeof(PlayerInput), typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
+    #region Field
     [Header("Movement"), SerializeField, Range(0f, 20f), Tooltip("기본 이동 속도")] private float moveSpeed;
     [SerializeField, Range(0f, 20f), Tooltip("점프력")] private float jumpPower;
     private Vector2 moveInputDir;
@@ -20,13 +20,15 @@ public class PlayerController : MonoBehaviour
     private const float MIN_ROT_X = -60f;   // 최소 X축 회전값
     private const float MAX_ROT_X = 60f;    // 최대 X축 회전값
     private Vector2 mouseInputDelta;
+    
     private bool isFirstPerson;
     private Vector3 firstPersonCamPos;
     private Vector3 thirdPersonCamPos;
 
     private bool isSlowMode;
 
-    private LayerMask groundDetectLayer;
+    // TODO: 현재 바닥검사 시 레이어 사용 안함 -> 나중에 주석 해제
+    //private LayerMask groundDetectLayer;
 
     private PlayerCondition condition;
     private PlayerAnimator animator;
@@ -35,7 +37,9 @@ public class PlayerController : MonoBehaviour
     public bool IsSprint => canSprint && moveInputDir.magnitude > 0f;
 
     public Rigidbody Rigidbody { get; private set; }
-
+    #endregion
+    
+    #region UnityMethod
     private void Awake()
     {
         moveSpeed = 5f;
@@ -50,7 +54,7 @@ public class PlayerController : MonoBehaviour
 
         isSlowMode = false;
         
-        groundDetectLayer = LayerMask.GetMask("Ground");
+        //groundDetectLayer = LayerMask.GetMask("Ground");
         
         Rigidbody = GetComponent<Rigidbody>();
         condition =  GetComponent<PlayerCondition>();
@@ -73,6 +77,7 @@ public class PlayerController : MonoBehaviour
     {
         Look();
     }
+    #endregion
     
     /// <summary>
     /// 캐릭터 이동
@@ -83,14 +88,14 @@ public class PlayerController : MonoBehaviour
         float speed;
         if (canSprint && moveInputDir.magnitude > 0.01f && condition.CanSprint)
         {
-            condition.HandleStamina();
-            animator.Sprint(true);
             speed = moveSpeed * sprintSpeedMultiplier;
+            condition.UseStamina();
+            animator.Sprint(true);
         }
         else
         {
-            animator.Sprint(false);
             speed = moveSpeed;
+            animator.Sprint(false);
         }
         velocity = transform.TransformDirection(velocity.normalized) * speed;
         animator.Move(velocity.magnitude > 0.01f);
@@ -157,6 +162,9 @@ public class PlayerController : MonoBehaviour
         return groundRay.Any(t => Physics.Raycast(t, 0.1f));
     }
 
+    /// <summary>
+    /// 슬로우 모드 On/Off
+    /// </summary>
     private void SlowMode()
     {
         if (isSlowMode && condition.CanSlowMode)
@@ -170,6 +178,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    #region InputSystemMethod
     public void OnMove(InputAction.CallbackContext context)
     {
         if (context.performed)
@@ -225,16 +234,8 @@ public class PlayerController : MonoBehaviour
         {
             isFirstPerson = !isFirstPerson;
             cameraController.SetPointOfView(isFirstPerson);
-            if (isFirstPerson)
-            {
-                // 1인칭
-                camContainer.localPosition = firstPersonCamPos;
-            }
-            else
-            {
-                // 3인칭
-                camContainer.localPosition = thirdPersonCamPos;
-            }
+            camContainer.localPosition = isFirstPerson ? firstPersonCamPos : thirdPersonCamPos;
         }
     }
+    #endregion
 }

@@ -1,11 +1,8 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(CapsuleCollider))]
-[RequireComponent(typeof(PlayerController))]
-[RequireComponent(typeof(PlayerCondition))]
-[RequireComponent(typeof(PlayerInteraction))]
+[RequireComponent(typeof(PlayerController), typeof(PlayerCondition), typeof(PlayerInteraction))]
 [RequireComponent(typeof(PlayerAnimator))]
+[RequireComponent(typeof(CapsuleCollider))]
 public class Player : MonoBehaviour
 {
     public PlayerController Controller { get; private set; }
@@ -21,6 +18,9 @@ public class Player : MonoBehaviour
         InitCapsuleCollider();
     }
 
+    /// <summary>
+    /// CapsuleCollider 초기화
+    /// </summary>
     private void InitCapsuleCollider()
     {
         var col = GetComponent<CapsuleCollider>();

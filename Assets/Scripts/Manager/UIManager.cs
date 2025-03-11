@@ -18,10 +18,12 @@ public class UIManager : Singleton<UIManager>
     /// </summary>
     private void SetMainUI()
     {
+        // 이미 데이터가 있을 경우 호출 종료
         if (mainUI != null) return;
         
         var go = GameObject.Find("MainUI");
 
+        // Hierarchy 창에서 찾았는데 없을 경우 
         if (go != null)
         {
             mainUI = mainUI = go.GetComponent<MainUI>();
@@ -29,6 +31,7 @@ public class UIManager : Singleton<UIManager>
             return;
         }
         
+        // 모든 경우에 해당하지 않으면 새로 생성 및 할당
         go = Resources.Load<GameObject>("Prefab/UI/MainUI");
         Instantiate(go).transform.SetParent(this.transform);
         mainUI = go.GetComponent<MainUI>();
