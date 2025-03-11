@@ -13,7 +13,6 @@ public class Recoverable
 public class ItemData : ScriptableObject
 {
     [Header("Item Info")]
-    public int itemID;
     public string itemName;
     public string itemDescription;
     public ItemType itemType;

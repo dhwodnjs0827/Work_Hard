@@ -1,5 +1,4 @@
 using DataDeclaration;
-using TMPro;
 using UnityEngine;
 
 public class ReadMeSign : MonoBehaviour, IInteraction

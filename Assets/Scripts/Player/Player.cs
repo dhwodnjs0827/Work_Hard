@@ -1,12 +1,14 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(PlayerController))]
 [RequireComponent(typeof(PlayerCondition))]
+[RequireComponent(typeof(PlayerInteraction))]
+[RequireComponent(typeof(PlayerAnimator))]
 public class Player : MonoBehaviour
 {
     public PlayerController Controller { get; private set; }
-
     public PlayerCondition Condition { get; private set; }
 
     private void Awake()

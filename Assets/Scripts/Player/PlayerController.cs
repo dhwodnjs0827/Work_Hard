@@ -20,12 +20,17 @@ public class PlayerController : MonoBehaviour
     private const float MIN_ROT_X = -60f;   // 최소 X축 회전값
     private const float MAX_ROT_X = 60f;    // 최대 X축 회전값
     private Vector2 mouseInputDelta;
+    private bool isFirstPerson;
+    private Vector3 firstPersonCamPos;
+    private Vector3 thirdPersonCamPos;
 
     private bool isSlowMode;
 
     private LayerMask groundDetectLayer;
 
     private PlayerCondition condition;
+    private PlayerAnimator animator;
+    private CameraController cameraController;
     
     public bool IsSprint => canSprint && moveInputDir.magnitude > 0f;
 
@@ -39,6 +44,9 @@ public class PlayerController : MonoBehaviour
         
         mouseSensitivity = 10f;
         camContainer = transform.Find("CameraContainer");
+        isFirstPerson = true;
+        firstPersonCamPos = new Vector3(0f, 1.6f, 0f);
+        thirdPersonCamPos = new Vector3(0.6f, 1.6f, -1.7f);
 
         isSlowMode = false;
         
@@ -46,6 +54,8 @@ public class PlayerController : MonoBehaviour
         
         Rigidbody = GetComponent<Rigidbody>();
         condition =  GetComponent<PlayerCondition>();
+        animator =  GetComponent<PlayerAnimator>();
+        if (Camera.main != null) cameraController = Camera.main.GetComponent<CameraController>();
     }
 
     private void FixedUpdate()
@@ -74,13 +84,16 @@ public class PlayerController : MonoBehaviour
         if (canSprint && moveInputDir.magnitude > 0.01f && condition.CanSprint)
         {
             condition.HandleStamina();
+            animator.Sprint(true);
             speed = moveSpeed * sprintSpeedMultiplier;
         }
         else
         {
+            animator.Sprint(false);
             speed = moveSpeed;
         }
         velocity = transform.TransformDirection(velocity.normalized) * speed;
+        animator.Move(velocity.magnitude > 0.01f);
         velocity.y = Rigidbody.velocity.y;
         Rigidbody.velocity = velocity;
     }
@@ -105,7 +118,23 @@ public class PlayerController : MonoBehaviour
         
         curCamRotX += mouseInputDelta.y * mouseSensitivity * MOUSE_SENSITIVITY_MULTIPLIER;
         curCamRotX = Mathf.Clamp(curCamRotX, MIN_ROT_X, MAX_ROT_X);
-        camContainer.localEulerAngles = new Vector3(-curCamRotX, 0f, 0f);
+        
+        if (isFirstPerson)
+        {
+            // 1인칭
+            curCamRotX = Mathf.Clamp(curCamRotX, MIN_ROT_X, MAX_ROT_X);
+            camContainer.localEulerAngles = new Vector3(-curCamRotX, 0f, 0f);
+        }
+        else
+        {
+            // 3인칭
+            var rotY = transform.eulerAngles.y;
+            var rotation = Quaternion.Euler(-curCamRotX, rotY, 0f);
+            var direction = thirdPersonCamPos;
+            var position = transform.position + rotation * direction;
+            camContainer.position = position;
+            camContainer.LookAt(transform.position + transform.up * 1.6f + transform.right * 0.6f);
+        }
     }
 
     /// <summary>
@@ -187,6 +216,25 @@ public class PlayerController : MonoBehaviour
         else
         {
             isSlowMode = false;
+        }
+    }
+    
+    public void OnChangePOV(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            isFirstPerson = !isFirstPerson;
+            cameraController.SetPointOfView(isFirstPerson);
+            if (isFirstPerson)
+            {
+                // 1인칭
+                camContainer.localPosition = firstPersonCamPos;
+            }
+            else
+            {
+                // 3인칭
+                camContainer.localPosition = thirdPersonCamPos;
+            }
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using DataDeclaration;
 using UnityEngine;
 
@@ -69,6 +70,7 @@ public class PlayerCondition : MonoBehaviour
     public void RecoverStamina(float amount)
     {
         curStamina = Mathf.Min(curStamina + amount, maxStamina);
+        conditionUI.UpdateConditionUI(ConditionType.SlowTime, curSlowTime / maxSlowTime);
     }
 
     /// <summary>
@@ -85,5 +87,21 @@ public class PlayerCondition : MonoBehaviour
     {
         CanSlowMode = true;
         curSlowTime = Mathf.Min(curSlowTime + amount, maxSlowTime);
+        conditionUI.UpdateConditionUI(ConditionType.SlowTime, curSlowTime / maxSlowTime);
+    }
+
+    public void RecoverCurCondition(ConditionType type, float amount)
+    {
+        switch (type)
+        {
+            case ConditionType.Stamina:
+                curStamina = Mathf.Min(curStamina + amount, maxStamina);
+                break;
+            case ConditionType.SlowTime:
+                CanSlowMode = true;
+                curSlowTime = Mathf.Min(curSlowTime + amount, maxSlowTime);
+                break;
+        }
+        conditionUI.UpdateConditionUI(type, amount);
     }
 }

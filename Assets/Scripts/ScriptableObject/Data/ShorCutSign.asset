@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf5a27af2fc1aef47ba6541e4cd194fb, type: 3}
-  m_Name: StaminaItem
+  m_Name: ShorCutSign
   m_EditorClassIdentifier: 
-  itemName: "\uC2A4\uD0DC\uBBF8\uB098 \uD68C\uBCF5 \uC544\uC774\uD15C"
-  itemDescription: "\uC2A4\uD14C\uBBF8\uB098\uB97C \uD68C\uBCF5\uC2DC\uD0A8\uB2E4."
-  itemType: 0
-  signContentText: 
-  recoverable:
-  - recoverableType: 0
-    value: 10
+  itemID: 0
+  itemName: "\uC9C0\uB984\uAE38 \uD45C\uC9C0\uD310"
+  itemDescription: 
+  itemType: 1
+  signContentText: "\uC774\uCABD\uC740 \uC9C0\uB984\uAE38"
+  recoverable: []

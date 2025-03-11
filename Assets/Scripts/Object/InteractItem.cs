@@ -10,17 +10,9 @@ public class InteractItem : MonoBehaviour, IInteraction
     {
         if (itemData.itemType == ItemType.Recoverable)
         {
-            for (int i = 0; i < itemData.recoverable.Length; i++)
+            foreach (var t in itemData.recoverable)
             {
-                switch (itemData.recoverable[i].recoverableType)
-                {
-                    case ConditionType.Stamina:
-                        GameManager.Instance.Player.Condition.RecoverStamina(itemData.recoverable[i].value);
-                        break;
-                    case ConditionType.SlowTime:
-                        GameManager.Instance.Player.Condition.RecoverSlowTime(itemData.recoverable[i].value);
-                        break;
-                }
+                GameManager.Instance.Player.Condition.RecoverCurCondition(t.recoverableType, t.value);
             }
         }
         Destroy(gameObject);
