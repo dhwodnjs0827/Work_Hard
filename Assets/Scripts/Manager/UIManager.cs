@@ -1,3 +1,4 @@
+using DataDeclaration;
 using UnityEngine;
 
 public class UIManager : Singleton<UIManager>
@@ -32,7 +33,7 @@ public class UIManager : Singleton<UIManager>
         }
         
         // 모든 경우에 해당하지 않으면 새로 생성 및 할당
-        go = Resources.Load<GameObject>("Prefab/UI/MainUI");
+        go = ResourceManager.GetResource(PrefabType.UI, "MainUI");
         Instantiate(go).transform.SetParent(this.transform);
         mainUI = go.GetComponent<MainUI>();
         mainUI.Init(this);

@@ -2,6 +2,22 @@
 namespace DataDeclaration
 {
     #region Enum
+
+    public enum ResourceType
+    {
+        Animations,
+        Materials,
+        Prefabs,
+        Textures
+    }
+
+    public enum PrefabType
+    {
+        Character,
+        Object,
+        UI
+    }
+    
     public enum ItemType
     {
         Recoverable,
