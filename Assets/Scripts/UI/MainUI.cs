@@ -1,3 +1,4 @@
+using System.Collections;
 using DataDeclaration;
 using TMPro;
 using UnityEngine;
@@ -10,13 +11,13 @@ public class MainUI : BaseUI
     private float playTimeSec;
     private int playTimeMin;
     
-    [SerializeField] private StaminaUI staminaUI;
+    [SerializeField] private ConditionUI conditionUI;
     [SerializeField] private TextMeshProUGUI playTimeText;
     [SerializeField] private TextMeshProUGUI heightInfoText;
     [SerializeField] private GameObject interactGuide;
     [SerializeField] private SignsUI signUI;
     
-    public StaminaUI StaminaUI => staminaUI;
+    public ConditionUI ConditionUI => conditionUI;
     public GameObject InteractGuide => interactGuide;
     public SignsUI SignUI => signUI;
 
@@ -34,7 +35,7 @@ public class MainUI : BaseUI
     
     private void Update()
     {
-        playTimeSec += Time.deltaTime;
+        playTimeSec += Time.unscaledDeltaTime;
         if (playTimeSec >= 60f)
         {
             playTimeMin += 1;

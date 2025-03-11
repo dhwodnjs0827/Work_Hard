@@ -14,8 +14,11 @@ public class InteractItem : MonoBehaviour, IInteraction
             {
                 switch (itemData.recoverable[i].recoverableType)
                 {
-                    case ItemRecoverable.Stamina:
+                    case ConditionType.Stamina:
                         GameManager.Instance.Player.Condition.RecoverStamina(itemData.recoverable[i].value);
+                        break;
+                    case ConditionType.SlowTime:
+                        GameManager.Instance.Player.Condition.RecoverSlowTime(itemData.recoverable[i].value);
                         break;
                 }
             }

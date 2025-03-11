@@ -7,9 +7,10 @@ namespace DataDeclaration
         Sign
     }
 
-    public enum ItemRecoverable
+    public enum ConditionType
     {
-        Stamina
+        Stamina,
+        SlowTime,
     }
 
     public enum UIState

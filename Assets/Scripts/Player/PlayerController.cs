@@ -20,12 +20,15 @@ public class PlayerController : MonoBehaviour
     private const float MIN_ROT_X = -60f;   // 최소 X축 회전값
     private const float MAX_ROT_X = 60f;    // 최대 X축 회전값
     private Vector2 mouseInputDelta;
-    
+
+    private bool isSlowMode;
+
     private LayerMask groundDetectLayer;
 
     private PlayerCondition condition;
     
     public bool IsSprint => canSprint && moveInputDir.magnitude > 0f && condition.CanSprint;
+
     public Rigidbody Rigidbody { get; private set; }
 
     private void Awake()
@@ -36,6 +39,8 @@ public class PlayerController : MonoBehaviour
         
         mouseSensitivity = 10f;
         camContainer = transform.Find("CameraContainer");
+
+        isSlowMode = false;
         
         groundDetectLayer = LayerMask.GetMask("Ground");
         
@@ -51,6 +56,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         Rotation();
+        SlowMode();
     }
 
     private void LateUpdate()
@@ -100,7 +106,7 @@ public class PlayerController : MonoBehaviour
     /// <para>False: 공중 상태</para></returns>
     private bool IsGround()
     {
-        var groundRay = new Ray[]
+        var groundRay = new[]
         {
             new Ray(transform.position + (transform.forward * 0.2f) + (transform.up * 0.01f), Vector3.down),
             new Ray(transform.position + (-transform.forward * 0.2f) + (transform.up * 0.01f), Vector3.down),
@@ -111,6 +117,19 @@ public class PlayerController : MonoBehaviour
         //TODO: 나중에 주석처리 해제해야 함
         //return groundRay.Any(t => Physics.Raycast(t, 0.1f, groundDetectLayer));
         return groundRay.Any(t => Physics.Raycast(t, 0.1f));
+    }
+
+    private void SlowMode()
+    {
+        if (isSlowMode && condition.CanSlowMode)
+        {
+            Time.timeScale = 0.5f;
+            condition.HandleSlowTime();
+        }
+        else
+        {
+            Time.timeScale = 1f;
+        }
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -148,5 +167,17 @@ public class PlayerController : MonoBehaviour
     public void OnLook(InputAction.CallbackContext context)
     {
         mouseInputDelta = context.ReadValue<Vector2>();
+    }
+
+    public void OnSlowMode(InputAction.CallbackContext context)
+    {
+        if (context.started || context.performed)
+        {
+            isSlowMode = true;
+        }
+        else
+        {
+            isSlowMode = false;
+        }
     }
 }

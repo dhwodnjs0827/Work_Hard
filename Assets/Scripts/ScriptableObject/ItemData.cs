@@ -5,7 +5,7 @@ using UnityEngine;
 [Serializable]
 public class Recoverable
 {
-    public ItemRecoverable recoverableType;
+    public ConditionType recoverableType;
     public float value;
 }
 
