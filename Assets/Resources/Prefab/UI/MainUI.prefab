@@ -228,7 +228,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   staminaGauge: {fileID: 9084390207617990508}
-  timeSlowGauge: {fileID: 5089255869521563202}
+  slowModeGauge: {fileID: 5089255869521563202}
 --- !u!1 &853297467536409031
 GameObject:
   m_ObjectHideFlags: 0

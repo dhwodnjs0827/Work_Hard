@@ -115,7 +115,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// 1인칭 카메라 컨트롤
+    /// 카메라 컨트롤
     /// </summary>
     private void Look()
     {
@@ -123,23 +123,16 @@ public class PlayerController : MonoBehaviour
         
         curCamRotX += mouseInputDelta.y * mouseSensitivity * MOUSE_SENSITIVITY_MULTIPLIER;
         curCamRotX = Mathf.Clamp(curCamRotX, MIN_ROT_X, MAX_ROT_X);
-        
-        if (isFirstPerson)
-        {
-            // 1인칭
-            curCamRotX = Mathf.Clamp(curCamRotX, MIN_ROT_X, MAX_ROT_X);
-            camContainer.localEulerAngles = new Vector3(-curCamRotX, 0f, 0f);
-        }
-        else
-        {
-            // 3인칭
-            var rotY = transform.eulerAngles.y;
-            var rotation = Quaternion.Euler(-curCamRotX, rotY, 0f);
-            var direction = thirdPersonCamPos;
-            var position = transform.position + rotation * direction;
-            camContainer.position = position;
-            camContainer.LookAt(transform.position + transform.up * 1.6f + transform.right * 0.6f);
-        }
+        camContainer.localEulerAngles = new Vector3(-curCamRotX, 0f, 0f);
+
+        if (isFirstPerson) return;
+        // 3인칭
+        var rotY = transform.eulerAngles.y;
+        var rotation = Quaternion.Euler(-curCamRotX, rotY, 0f);
+        var offsetPos = new Vector3(0.6f, 0f, -1.7f);
+        // 쿼터니언을 벡터에 곱하면 해당 벡터가 회전됨
+        var position = transform.position + Vector3.up * 1.6f + rotation * offsetPos;
+        camContainer.position = position;
     }
 
     /// <summary>
