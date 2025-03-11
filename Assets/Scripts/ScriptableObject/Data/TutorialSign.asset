@@ -15,6 +15,6 @@ MonoBehaviour:
   itemName: "\uD29C\uD1A0\uB9AC\uC5BC \uD45C\uC9C0\uD310"
   itemDescription: "\uD29C\uD1A0\uB9AC\uC5BC \uC548\uB0B4"
   itemType: 1
-  signContentText: "V: \uC2DC\uC810 \uBCC0\uACBD    \uC88C\uD074\uB9AD: \uC2AC\uB85C\uC6B0
-    \uBAA8\uB4DC"
+  signContentText: "LShift: \uB2EC\uB9AC\uAE30 V: \uC2DC\uC810 \uBCC0\uACBD    \uC88C\uD074\uB9AD:
+    \uC2AC\uB85C\uC6B0 \uBAA8\uB4DC"
   recoverable: []
