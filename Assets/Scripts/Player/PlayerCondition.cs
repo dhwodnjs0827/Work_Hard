@@ -1,4 +1,3 @@
-using System;
 using DataDeclaration;
 using UnityEngine;
 
@@ -96,12 +95,16 @@ public class PlayerCondition : MonoBehaviour
         {
             case ConditionType.Stamina:
                 curStamina = Mathf.Min(curStamina + amount, maxStamina);
+                conditionUI.UpdateConditionUI(type, curStamina / maxStamina);
                 break;
             case ConditionType.SlowTime:
                 CanSlowMode = true;
                 curSlowTime = Mathf.Min(curSlowTime + amount, maxSlowTime);
+                conditionUI.UpdateConditionUI(type, curSlowTime / maxSlowTime);
                 break;
+            default:
+                return;
         }
-        conditionUI.UpdateConditionUI(type, amount);
+        
     }
 }
